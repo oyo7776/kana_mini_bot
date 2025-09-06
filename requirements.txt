@@ -1,4 +1,5 @@
 pyTelegramBotAPI
-flask
 requests
-aiohttp
+flask
+flask-cors
+chapa

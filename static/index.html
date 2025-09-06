@@ -1,0 +1,39 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Kana Mini Casino</title>
+  <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+  <div id="app" class="container">
+    <h1>🎮 Kana Mini Casino</h1>
+    <div id="user">Connecting...</div>
+
+    <div class="card">
+      <p>Balance: <span id="balance">--</span> ETB</p>
+      <input id="betAmount" type="number" placeholder="Bet amount (ETB)" />
+      <button id="btnBet">Play Aviator</button>
+    </div>
+
+    <div class="card">
+      <h3>Deposit</h3>
+      <input id="depositAmount" type="number" placeholder="Amount (ETB)" />
+      <input id="depositEmail" type="email" placeholder="Your email" />
+      <button id="btnDeposit">Deposit</button>
+    </div>
+
+    <div class="card">
+      <h3>Withdraw</h3>
+      <input id="withdrawAmount" type="number" placeholder="Amount (ETB)" />
+      <input id="withdrawEmail" type="email" placeholder="Recipient email" />
+      <button id="btnWithdraw">Withdraw</button>
+    </div>
+
+    <pre id="log"></pre>
+  </div>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>
