@@ -1,24 +1,34 @@
-from flask import Flask, render_template
-import telebot, os, threading
+import os
+from flask import Flask
+import telebot
 
-BOT_TOKEN = os.getenv("BOT_TOKEN")  # set in Railway later
+# Get your bot token from Railway variables
+BOT_TOKEN = os.environ.get("BOT_TOKEN")
+
 bot = telebot.TeleBot(BOT_TOKEN)
-
 app = Flask(__name__)
 
-# Serve Mini App
+# Flask route for Railway keep-alive
 @app.route("/")
-def index():
-    return render_template("index.html")
+def home():
+    return "✅ Bot is running on Railway with Flask keep-alive!"
 
-# Telegram /start
+# Telegram command
 @bot.message_handler(commands=["start"])
 def send_welcome(message):
-    markup = telebot.types.ReplyKeyboardMarkup(resize_keyboard=True)
-    webAppTest = telebot.types.WebAppInfo("https://YOUR-RAILWAY-URL/")  
-    markup.add(telebot.types.KeyboardButton("🎮 Open Mini App", web_app=webAppTest))
-    bot.send_message(message.chat.id, "✅ Welcome! Open the Mini App:", reply_markup=markup)
+    bot.reply_to(message, "Hello 👋, your bot is live on Railway!")
 
 if __name__ == "__main__":
-    threading.Thread(target=lambda: app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))).start()
-    bot.polling(none_stop=True)
+    # Start Flask server
+    port = int(os.environ.get("PORT", 5000))
+    from threading import Thread
+
+    def run_flask():
+        app.run(host="0.0.0.0", port=port)
+
+    def run_bot():
+        bot.infinity_polling()
+
+    # Run both Flask + Bot
+    Thread(target=run_flask).start()
+    Thread(target=run_bot).start()
