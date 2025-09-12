@@ -1,5 +1,3 @@
+Flask
 pyTelegramBotAPI
-requests
-flask
-flask-cors
-chapa
+gunicorn
