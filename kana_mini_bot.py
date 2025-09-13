@@ -1,22 +1,23 @@
 import os
+import threading
 from flask import Flask
 from telebot import TeleBot, types
 
-# 🔑 Your Telegram bot token (set in Railway variables)
+# 🔑 Load bot token from Railway environment
 BOT_TOKEN = os.environ.get("BOT_TOKEN")
 
 bot = TeleBot(BOT_TOKEN)
 app = Flask(__name__)
 
-# 🟢 Mini App frontend link (your Railway web domain)
-FRONTEND_URL = "kanaminibot-production.up.railway.app"
+# 🟢 Mini App frontend link (your Railway link)
+FRONTEND_URL = "https://kanaminibot-production.up.railway.app/"
 
-# ✅ Flask home route for Railway keep-alive
+# ✅ Flask route
 @app.route('/')
 def home():
     return "✅ Bot is running on Railway with Flask keep-alive!"
 
-# 🎯 Telegram bot command
+# 🎯 Start command
 @bot.message_handler(commands=['start'])
 def start(message):
     markup = types.InlineKeyboardMarkup()
@@ -31,11 +32,14 @@ def start(message):
         reply_markup=markup
     )
 
-# 🟢 Keep bot alive with polling
+# 🟢 Run bot polling in background
 def run_bot():
     bot.infinity_polling()
 
 if __name__ == "__main__":
-    # Run Flask (Railway exposes this)
+    # Start bot in separate thread
+    threading.Thread(target=run_bot).start()
+
+    # Start Flask
     port = int(os.environ.get("PORT", 5000))
     app.run(host="0.0.0.0", port=port)
