@@ -1,0 +1,30 @@
+body {
+  font-family: Arial, sans-serif;
+  background: #0b0c10;
+  color: #fff;
+  text-align: center;
+  margin: 0;
+  padding: 20px;
+}
+
+h1 {
+  color: #66fcf1;
+}
+
+button {
+  padding: 12px 20px;
+  border: none;
+  border-radius: 8px;
+  font-size: 18px;
+  cursor: pointer;
+}
+
+.start-btn {
+  background: #45a29e;
+  color: white;
+}
+
+.cashout-btn {
+  background: #ff4c29;
+  color: white;
+}
