@@ -1,34 +1,41 @@
 import os
 from flask import Flask
-import telebot
+from telebot import TeleBot, types
 
-# Get your bot token from Railway variables
+# 🔑 Your Telegram bot token (set in Railway variables)
 BOT_TOKEN = os.environ.get("BOT_TOKEN")
 
-bot = telebot.TeleBot(BOT_TOKEN)
+bot = TeleBot(BOT_TOKEN)
 app = Flask(__name__)
 
-# Flask route for Railway keep-alive
-@app.route("/")
+# 🟢 Mini App frontend link (your Railway web domain)
+FRONTEND_URL = "kanaminibot-production.up.railway.app"
+
+# ✅ Flask home route for Railway keep-alive
+@app.route('/')
 def home():
     return "✅ Bot is running on Railway with Flask keep-alive!"
 
-# Telegram command
-@bot.message_handler(commands=["start"])
-def send_welcome(message):
-    bot.reply_to(message, "Hello 👋, your bot is live on Railway!")
+# 🎯 Telegram bot command
+@bot.message_handler(commands=['start'])
+def start(message):
+    markup = types.InlineKeyboardMarkup()
+    btn = types.InlineKeyboardButton(
+        "🚀 Open Mini App",
+        web_app=types.WebAppInfo(FRONTEND_URL)
+    )
+    markup.add(btn)
+    bot.send_message(
+        message.chat.id,
+        "Welcome! Click below to open the Mini App 👇",
+        reply_markup=markup
+    )
+
+# 🟢 Keep bot alive with polling
+def run_bot():
+    bot.infinity_polling()
 
 if __name__ == "__main__":
-    # Start Flask server
+    # Run Flask (Railway exposes this)
     port = int(os.environ.get("PORT", 5000))
-    from threading import Thread
-
-    def run_flask():
-        app.run(host="0.0.0.0", port=port)
-
-    def run_bot():
-        bot.infinity_polling()
-
-    # Run both Flask + Bot
-    Thread(target=run_flask).start()
-    Thread(target=run_bot).start()
+    app.run(host="0.0.0.0", port=port)
